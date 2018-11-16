@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/customborder">
+
+    <TextView
+        android:id="@+id/planName"
+        style="@style/word_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/planId"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/plan_details"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/pd_rp1_hint"
+            style="@style/word_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/rp1" />
+
+        <TextView
+            android:id="@+id/pd_rp1"
+            style="@style/word_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/pd_rp2_hint"
+            style="@style/word_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/rp2" />
+
+        <TextView
+            android:id="@+id/pd_rp2"
+            style="@style/word_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/pd_rp3_hint"
+            style="@style/word_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/rp3" />
+
+        <TextView
+            android:id="@+id/pd_rp3"
+            style="@style/word_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/pd_rp4_hint"
+            style="@style/word_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/rp4" />
+
+        <TextView
+            android:id="@+id/pd_rp4"
+            style="@style/word_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/pd_rp5_hint"
+            style="@style/word_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/rp5" />
+
+        <TextView
+            android:id="@+id/pd_rp5"
+            style="@style/word_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/pd_q1_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_hint"
+            android:text="@string/question1"/>
+        <TextView
+            android:id="@+id/pd_q1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_content"/>
+
+        <TextView
+            android:id="@+id/pd_q2_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_hint"
+            android:text="@string/question2"/>
+        <TextView
+            android:id="@+id/pd_q2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_content"/>
+
+        <TextView
+            android:id="@+id/pd_q3_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_hint"
+            android:text="@string/question3"/>
+        <TextView
+            android:id="@+id/pd_q3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_content"/>
+
+        <TextView
+            android:id="@+id/pd_q4_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_hint"
+            android:text="@string/question4"/>
+        <TextView
+            android:id="@+id/pd_q4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_content"/>
+
+        <TextView
+            android:id="@+id/pd_q5_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_hint"
+            android:text="@string/question5"/>
+        <TextView
+            android:id="@+id/pd_q5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_content"/>
+
+        <TextView
+            android:id="@+id/pd_q6_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_hint"
+            android:text="@string/question6"/>
+        <TextView
+            android:id="@+id/pd_q6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/word_content"/>
+
+    </LinearLayout>
+
+</LinearLayout>

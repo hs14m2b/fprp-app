@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:scrollbarStyle="insideOverlay"
+    tools:scrollbarSize="@dimen/activity_vertical_margin">
+
+    <EditText
+        android:id="@+id/edit_plan_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/big_padding"
+        android:layout_marginTop="@dimen/big_padding"
+        android:fontFamily="sans-serif-light"
+        android:hint="@string/hint_word"
+        android:inputType="textAutoComplete"
+        android:padding="@dimen/small_padding"
+        android:textSize="18sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/np_q1_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/small_padding"
+                android:text="@string/question1" />
+
+            <EditText
+                android:id="@+id/edit_question1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/big_padding"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/question1"
+                android:inputType="textAutoComplete"
+                android:padding="@dimen/small_padding"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/np_q2_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/small_padding"
+                android:text="@string/question2" />
+
+            <EditText
+                android:id="@+id/edit_question2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/big_padding"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/question2"
+                android:inputType="textAutoComplete"
+                android:padding="@dimen/small_padding"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/np_q3_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/small_padding"
+                android:text="@string/question3" />
+
+            <EditText
+                android:id="@+id/edit_question3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/big_padding"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/question3"
+                android:inputType="textAutoComplete"
+                android:padding="@dimen/small_padding"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/np_q4_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/small_padding"
+                android:text="@string/question4" />
+
+            <EditText
+                android:id="@+id/edit_question4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/big_padding"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/question4"
+                android:inputType="textAutoComplete"
+                android:padding="@dimen/small_padding"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/np_q5_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/small_padding"
+                android:text="@string/question5" />
+
+            <EditText
+                android:id="@+id/edit_question5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/big_padding"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/question5"
+                android:inputType="textAutoComplete"
+                android:padding="@dimen/small_padding"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/np_q6_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/small_padding"
+                android:text="@string/question6" />
+
+            <EditText
+                android:id="@+id/edit_question6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/big_padding"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/question6"
+                android:inputType="textAutoComplete"
+                android:padding="@dimen/small_padding"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/np_rp1_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/small_padding"
+                android:text="@string/rp1" />
+
+            <EditText
+                android:id="@+id/edit_rp1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/big_padding"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/rp1"
+                android:inputType="textAutoComplete"
+                android:padding="@dimen/small_padding"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/np_rp2_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/small_padding"
+                android:text="@string/rp2" />
+
+            <EditText
+                android:id="@+id/edit_rp2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/big_padding"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/rp2"
+                android:inputType="textAutoComplete"
+                android:padding="@dimen/small_padding"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/np_rp3_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/small_padding"
+                android:text="@string/rp3" />
+
+            <EditText
+                android:id="@+id/edit_rp3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/big_padding"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/rp3"
+                android:inputType="textAutoComplete"
+                android:padding="@dimen/small_padding"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/np_rp4_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/small_padding"
+                android:text="@string/rp4" />
+
+            <EditText
+                android:id="@+id/edit_rp4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/big_padding"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/rp4"
+                android:inputType="textAutoComplete"
+                android:padding="@dimen/small_padding"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/np_rp5_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/small_padding"
+                android:text="@string/rp5" />
+
+            <EditText
+                android:id="@+id/edit_rp5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/big_padding"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/rp5"
+                android:inputType="textAutoComplete"
+                android:padding="@dimen/small_padding"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/button_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:text="@string/button_save"
+                android:textColor="@color/buttonLabel" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/textPlanId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
+
+</LinearLayout>

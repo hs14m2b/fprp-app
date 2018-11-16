@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Five-Point Rescue Plans</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">My Plans</string>
+    <string name="title_shop">Shop</string>
+    <string name="instructions">Place your fingertip on the sensor to unlock your Five Point Rescue Plans</string>
+    <string name="home_text">Welcome to the Five-Point Rescue Plan App.</string>
+    <string name="instruction_text">This App is designed to complement the Five-Point Rescue Plan book and provides a convenient way to securely store details of your plans.</string>
+    <string name="plan_name">Plan Name</string>
+    <string name="hint_word">Plan Name...</string>
+    <string name="question1">What is my perceived problem?</string>
+    <string name="question2">What are my negative behaviours?</string>
+    <string name="question3">What drives these behaviours?</string>
+    <string name="question4">What are my limitations?</string>
+    <string name="question5">What can I change?</string>
+    <string name="question6">What is my actual problem?</string>
+    <string name="rp1">My Rescue Point 1 is...</string>
+    <string name="rp2">My Rescue Point 2 is...</string>
+    <string name="rp3">My Rescue Point 3 is...</string>
+    <string name="rp4">My Rescue Point 4 is...</string>
+    <string name="rp5">My Rescue Point 5 is...</string>
+    <string name="hint_details">Plan details...</string>
+    <string name="button_save">Save</string>
+    <string name="empty_not_saved">Plan not saved (because it is empty or has not changed).</string>
+    <string name="fp_auth_label">Unlock your Five-Point Rescue Plans</string>
+    <string name="edit_fprp_label">Edit or Create your Rescue Plan</string>
+    <integer name="hint_size">16</integer>
+    <integer name="text_size">24</integer>
+    <string name="shopUrl">https://www.amazon.co.uk/Five-Point-Rescue-Plan-Take-control-ebook/dp/B075RVQ6P2/ref=sr_1_2?ie=UTF8&#38;qid=1527261281&#38;sr=8-2&#38;keywords=Five-point+rescue+plan</string>
+</resources>
