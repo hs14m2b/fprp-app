@@ -1,9 +1,8 @@
-package click.mr_b.myapplication;
+package click.mr_b.fprp_app;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.Manifest;

@@ -1,4 +1,4 @@
-package click.mr_b.myapplication;
+package click.mr_b.fprp_app;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
@@ -8,7 +8,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,13 +27,13 @@ public class PasswordDialog extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_password_dialog);
+        setContentView(click.mr_b.fprp_app.R.layout.activity_password_dialog);
         mPasswordViewModel = ViewModelProviders.of(this).get(PasswordViewModel.class);
-        mNewPassword = findViewById(R.id.newPassword);
-        mPassword = findViewById(R.id.checkPassword);
-        mPassword1 = findViewById(R.id.newPassword1);
-        mPassword2 = findViewById(R.id.newPassword2);
-        mCurrentPassword = findViewById(R.id.currentPassword);
+        mNewPassword = findViewById(click.mr_b.fprp_app.R.id.newPassword);
+        mPassword = findViewById(click.mr_b.fprp_app.R.id.checkPassword);
+        mPassword1 = findViewById(click.mr_b.fprp_app.R.id.newPassword1);
+        mPassword2 = findViewById(click.mr_b.fprp_app.R.id.newPassword2);
+        mCurrentPassword = findViewById(click.mr_b.fprp_app.R.id.currentPassword);
         if (mPasswordViewModel.countEntries() == 0)
         {
             mPassword.setVisibility(View.INVISIBLE);
@@ -45,7 +44,7 @@ public class PasswordDialog extends AppCompatActivity {
             mPassword.setVisibility(View.VISIBLE);
             mNewPassword.setVisibility(View.INVISIBLE);
         }
-        final Button button = findViewById(R.id.buttonCreate);
+        final Button button = findViewById(click.mr_b.fprp_app.R.id.buttonCreate);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 boolean blnSave = false;
@@ -74,7 +73,7 @@ public class PasswordDialog extends AppCompatActivity {
                     authSucceeded();
                 }
             }});
-        final Button buttonAuth = findViewById(R.id.buttonUnlockPlans);
+        final Button buttonAuth = findViewById(click.mr_b.fprp_app.R.id.buttonUnlockPlans);
         buttonAuth.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 boolean blnSave = false;
@@ -92,7 +91,7 @@ public class PasswordDialog extends AppCompatActivity {
                 }
             }});
 
-        final Button buttonForgot = findViewById(R.id.buttonForgotPassword);
+        final Button buttonForgot = findViewById(click.mr_b.fprp_app.R.id.buttonForgotPassword);
         buttonForgot.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(PasswordDialog.this);

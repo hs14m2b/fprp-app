@@ -1,4 +1,4 @@
-package click.mr_b.myapplication;
+package click.mr_b.fprp_app;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;

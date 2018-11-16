@@ -1,19 +1,12 @@
-package click.mr_b.myapplication;
+package click.mr_b.fprp_app;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 public class PlanItemTouchListener implements RecyclerView.OnItemTouchListener {
 
@@ -81,7 +74,7 @@ public class PlanItemTouchListener implements RecyclerView.OnItemTouchListener {
                 //Toast.makeText(context, "Long Touch on position :" + position, Toast.LENGTH_SHORT).show();
                 Log.d(this.getClass().getSimpleName(), "Long Touch on position :" + position);
                 //get plan id
-                TextView planIdView = child.findViewById(R.id.planId);
+                TextView planIdView = child.findViewById(click.mr_b.fprp_app.R.id.planId);
                 try {
                     int planId = Integer.parseInt(planIdView.getText().toString());
                     //raise event, pass plan ID back
@@ -107,7 +100,7 @@ public class PlanItemTouchListener implements RecyclerView.OnItemTouchListener {
                 if (position1 == position2) {
                     //Toast.makeText(context, "Fling on position :" + position1 + " xDelta is " + xDelta, Toast.LENGTH_SHORT).show();
                     Log.d(this.getClass().getSimpleName(), "Fling on position :" + position1 + " xDelta is " + xDelta);
-                    TextView planIdView = child1.findViewById(R.id.planId);
+                    TextView planIdView = child1.findViewById(click.mr_b.fprp_app.R.id.planId);
                     if (xDelta > 500) {
                         //delete the item
                         try {

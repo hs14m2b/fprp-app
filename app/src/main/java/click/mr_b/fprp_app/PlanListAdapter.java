@@ -1,8 +1,7 @@
-package click.mr_b.myapplication;
+package click.mr_b.fprp_app;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,11 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
-
-import javax.crypto.Cipher;
-
-import static android.util.TypedValue.COMPLEX_UNIT_SP;
-import static android.util.TypedValue.TYPE_DIMENSION;
 
 public class PlanListAdapter extends RecyclerView.Adapter<PlanListAdapter.PlanViewHolder> {
 
@@ -36,19 +30,19 @@ public class PlanListAdapter extends RecyclerView.Adapter<PlanListAdapter.PlanVi
 
         private PlanViewHolder(View itemView) {
             super(itemView);
-            planItemView = itemView.findViewById(R.id.planName);
-            planIdView = itemView.findViewById(R.id.planId);
-            mEditQ1View = itemView.findViewById(R.id.pd_q1);
-            mEditQ2View = itemView.findViewById(R.id.pd_q2);
-            mEditQ3View = itemView.findViewById(R.id.pd_q3);
-            mEditQ4View = itemView.findViewById(R.id.pd_q4);
-            mEditQ5View = itemView.findViewById(R.id.pd_q5);
-            mEditQ6View = itemView.findViewById(R.id.pd_q6);
-            mEditRP1View = itemView.findViewById(R.id.pd_rp1);
-            mEditRP2View = itemView.findViewById(R.id.pd_rp2);
-            mEditRP3View = itemView.findViewById(R.id.pd_rp3);
-            mEditRP4View = itemView.findViewById(R.id.pd_rp4);
-            mEditRP5View = itemView.findViewById(R.id.pd_rp5);
+            planItemView = itemView.findViewById(click.mr_b.fprp_app.R.id.planName);
+            planIdView = itemView.findViewById(click.mr_b.fprp_app.R.id.planId);
+            mEditQ1View = itemView.findViewById(click.mr_b.fprp_app.R.id.pd_q1);
+            mEditQ2View = itemView.findViewById(click.mr_b.fprp_app.R.id.pd_q2);
+            mEditQ3View = itemView.findViewById(click.mr_b.fprp_app.R.id.pd_q3);
+            mEditQ4View = itemView.findViewById(click.mr_b.fprp_app.R.id.pd_q4);
+            mEditQ5View = itemView.findViewById(click.mr_b.fprp_app.R.id.pd_q5);
+            mEditQ6View = itemView.findViewById(click.mr_b.fprp_app.R.id.pd_q6);
+            mEditRP1View = itemView.findViewById(click.mr_b.fprp_app.R.id.pd_rp1);
+            mEditRP2View = itemView.findViewById(click.mr_b.fprp_app.R.id.pd_rp2);
+            mEditRP3View = itemView.findViewById(click.mr_b.fprp_app.R.id.pd_rp3);
+            mEditRP4View = itemView.findViewById(click.mr_b.fprp_app.R.id.pd_rp4);
+            mEditRP5View = itemView.findViewById(click.mr_b.fprp_app.R.id.pd_rp5);
 
         }
     }
@@ -68,7 +62,7 @@ public class PlanListAdapter extends RecyclerView.Adapter<PlanListAdapter.PlanVi
 
     @Override
     public PlanViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
+        View itemView = mInflater.inflate(click.mr_b.fprp_app.R.layout.recyclerview_item, parent, false);
         return new PlanViewHolder(itemView);
     }
 

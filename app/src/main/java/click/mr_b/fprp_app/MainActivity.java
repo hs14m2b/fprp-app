@@ -1,10 +1,9 @@
-package click.mr_b.myapplication;
+package click.mr_b.fprp_app;
 
 import android.app.Activity;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,12 +17,10 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
@@ -36,46 +33,20 @@ import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.Manifest;
 import android.os.Build;
-import android.os.Bundle;
-import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyPermanentlyInvalidatedException;
-import android.security.keystore.KeyProperties;
 import android.support.v4.app.ActivityCompat;
-import android.widget.TextView;
-import java.io.IOException;
-import java.security.AlgorithmParameters;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyFactory;
+
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.security.spec.InvalidParameterSpecException;
-import java.security.spec.MGF1ParameterSpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.OAEPParameterSpec;
-import javax.crypto.spec.PSource;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.widget.Toast;
 import android.arch.lifecycle.ProcessLifecycleOwner;
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleObserver;
 
-import click.mr_b.myapplication.databinding.ActivityMainBinding;
+import click.mr_b.fprp_app.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements LifecycleObserver, ClickListener, AuthenticationListener{
 
@@ -115,15 +86,15 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             previousMenuItem = currentMenuItem;
             switch (item.getItemId()) {
-                case R.id.navigation_home:
+                case click.mr_b.fprp_app.R.id.navigation_home:
                     currentMenuItem = 0;
                     showHome();
                     return true;
-                case R.id.navigation_dashboard:
+                case click.mr_b.fprp_app.R.id.navigation_dashboard:
                     currentMenuItem = 1;
                     showPlans();
                     return true;
-                case R.id.navigation_shop:
+                case click.mr_b.fprp_app.R.id.navigation_shop:
                     currentMenuItem = 2;
                     if (showShop()) {
                         return true;
@@ -145,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, click.mr_b.fprp_app.R.layout.activity_main);
         mTextMessage = binding.textViewHome;
         textView2 = binding.textViewInstructions;
         imageView = binding.imageFPRPFront;
@@ -154,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
         navigation = binding.navigation;
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mFprpWebView = binding.fprpWebview;
-        mFprpWebView.loadUrl(getResources().getString(R.string.shopUrl));
+        mFprpWebView.loadUrl(getResources().getString(click.mr_b.fprp_app.R.string.shopUrl));
 
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
             mTextMessage.setVisibility(View.INVISIBLE);
             textView2.setVisibility(View.INVISIBLE);
             imageView.setVisibility(View.INVISIBLE);
-            mFprpWebView.loadUrl(getResources().getString(R.string.shopUrl));
+            mFprpWebView.loadUrl(getResources().getString(click.mr_b.fprp_app.R.string.shopUrl));
             mFprpWebView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
             FAB.setVisibility(View.INVISIBLE);
@@ -299,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
                 fingerprintManager =
                         (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
 
-                textView = (TextView) findViewById(R.id.textView_home);
+                textView = (TextView) findViewById(click.mr_b.fprp_app.R.id.textView_home);
 
                 //Check whether the device has a fingerprint sensor//
                 if (!fingerprintManager.isHardwareDetected()) {
@@ -490,7 +461,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
     public void onClick(View view, final int position) {
         //Values are passing to activity & to fragment as well
         Log.d("ClickListener", "Single Click on position        :"+position);
-        LinearLayout ll_details = view.findViewById(R.id.plan_details);
+        LinearLayout ll_details = view.findViewById(click.mr_b.fprp_app.R.id.plan_details);
         if (ll_details.getVisibility() == View.VISIBLE)
         {
             ll_details.setVisibility(View.INVISIBLE);

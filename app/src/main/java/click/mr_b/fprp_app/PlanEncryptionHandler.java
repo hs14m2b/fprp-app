@@ -1,17 +1,14 @@
-package click.mr_b.myapplication;
+package click.mr_b.fprp_app;
 
 
 import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
 
 import java.io.IOException;
-import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -25,8 +22,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
-
-import static click.mr_b.myapplication.MainActivity.KEY_NAME;
 
 class PlanEncryptionHandler {
 
@@ -47,9 +42,9 @@ class PlanEncryptionHandler {
             keyStore = KeyStore.getInstance("AndroidKeyStore");
             keyStore.load(null);
             Log.d("PlanEncryptionHandler", "loaded keystore");
-            enckey = (SecretKey) keyStore.getKey(KEY_NAME,null);
+            enckey = (SecretKey) keyStore.getKey(MainActivity.KEY_NAME,null);
             Log.d("PlanEncryptionHandler", "got secret key for encryption");
-            deckey = (SecretKey) keyStore.getKey(KEY_NAME,null);
+            deckey = (SecretKey) keyStore.getKey(MainActivity.KEY_NAME,null);
             Log.d("authenticationSucceeded", "got secret key for decryption");
             //cipher.init(Cipher.DECRYPT_MODE, key,params);
             //Log.d("authenticationSucceeded", "initialised cipher for decryption");
@@ -213,7 +208,7 @@ class PlanEncryptionHandler {
             // Obtain a reference to the Keystore using the standard Android keystore container identifier (“AndroidKeystore”)//
             keyStore = KeyStore.getInstance("AndroidKeyStore");
             keyStore.load(null);
-            if (!keyStore.containsAlias(KEY_NAME)) {
+            if (!keyStore.containsAlias(MainActivity.KEY_NAME)) {
                 Log.d("generateKey", "Key not found in keystore so generate new key");
                 //Generate the key//
                 KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
@@ -223,7 +218,7 @@ class PlanEncryptionHandler {
                 keyGenerator.init(new
 
                         //Specify the operation(s) this key can be used for//
-                        KeyGenParameterSpec.Builder(KEY_NAME,
+                        KeyGenParameterSpec.Builder(MainActivity.KEY_NAME,
                         KeyProperties.PURPOSE_ENCRYPT |
                                 KeyProperties.PURPOSE_DECRYPT)
                         .setBlockModes(KeyProperties.BLOCK_MODE_CBC)

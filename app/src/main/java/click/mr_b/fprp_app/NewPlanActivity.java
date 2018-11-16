@@ -1,4 +1,4 @@
-package click.mr_b.myapplication;
+package click.mr_b.fprp_app;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
@@ -52,22 +52,22 @@ public class NewPlanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         Intent intent = this.getIntent();
-        setContentView(R.layout.activity_new_plan);
-        mPlanIdView = findViewById(R.id.textPlanId);
-        mEditPlanView = findViewById(R.id.edit_plan_name);
-        mEditQ1View = findViewById(R.id.edit_question1);
-        mEditQ2View = findViewById(R.id.edit_question2);
-        mEditQ3View = findViewById(R.id.edit_question3);
-        mEditQ4View = findViewById(R.id.edit_question4);
-        mEditQ5View = findViewById(R.id.edit_question5);
-        mEditQ6View = findViewById(R.id.edit_question6);
-        mEditRP1View = findViewById(R.id.edit_rp1);
-        mEditRP2View = findViewById(R.id.edit_rp2);
-        mEditRP3View = findViewById(R.id.edit_rp3);
-        mEditRP4View = findViewById(R.id.edit_rp4);
-        mEditRP5View = findViewById(R.id.edit_rp5);
+        setContentView(click.mr_b.fprp_app.R.layout.activity_new_plan);
+        mPlanIdView = findViewById(click.mr_b.fprp_app.R.id.textPlanId);
+        mEditPlanView = findViewById(click.mr_b.fprp_app.R.id.edit_plan_name);
+        mEditQ1View = findViewById(click.mr_b.fprp_app.R.id.edit_question1);
+        mEditQ2View = findViewById(click.mr_b.fprp_app.R.id.edit_question2);
+        mEditQ3View = findViewById(click.mr_b.fprp_app.R.id.edit_question3);
+        mEditQ4View = findViewById(click.mr_b.fprp_app.R.id.edit_question4);
+        mEditQ5View = findViewById(click.mr_b.fprp_app.R.id.edit_question5);
+        mEditQ6View = findViewById(click.mr_b.fprp_app.R.id.edit_question6);
+        mEditRP1View = findViewById(click.mr_b.fprp_app.R.id.edit_rp1);
+        mEditRP2View = findViewById(click.mr_b.fprp_app.R.id.edit_rp2);
+        mEditRP3View = findViewById(click.mr_b.fprp_app.R.id.edit_rp3);
+        mEditRP4View = findViewById(click.mr_b.fprp_app.R.id.edit_rp4);
+        mEditRP5View = findViewById(click.mr_b.fprp_app.R.id.edit_rp5);
 
-        final Button button = findViewById(R.id.button_save);
+        final Button button = findViewById(click.mr_b.fprp_app.R.id.button_save);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent replyIntent = new Intent();

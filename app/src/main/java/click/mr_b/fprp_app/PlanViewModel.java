@@ -1,4 +1,4 @@
-package click.mr_b.myapplication;
+package click.mr_b.fprp_app;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -6,8 +6,6 @@ import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
 import java.util.List;
-
-import javax.crypto.Cipher;
 
 public class PlanViewModel extends AndroidViewModel {
     private PlanRepository mRepository;
