@@ -33,16 +33,20 @@ public class PlanViewModel extends AndroidViewModel {
         mRepository.insert(encPlan);
     }
 
-    public void delete(Plan plan) {mRepository.delete(plan);}
+    public void delete(Plan plan) {
+        Log.d("PlanViewModel - delete", "Plan details " + plan.toString());
+        mRepository.delete(plan);
+        Log.d("PlanViewModel - delete", "Deleted plan " + plan.toString());
+    }
 
     public void deleteAll(){mRepository.deleteAll();}
 
     public Plan getPlanById(int id){
-        Log.d("PlanViewModel - getPlanById", "Entered getPlanById plan for plan number " + id);
+        Log.d("PVM - getPlanById", "Entered getPlanById plan for plan number " + id);
         Plan plan = mRepository.getPlanById(id);
-        Log.d("PlanViewModel - getPlanById", "Plan details " + plan.toString());
+        Log.d("PVM - getPlanById", "Plan details " + plan.toString());
         Plan decPlan = planEncryptionHandler.decrypt(plan);
-        Log.d("PlanViewModel - getPlanById", "Decrypted plan details " + decPlan.toString());
+        Log.d("PVM - getPlanById", "Decrypted plan details " + decPlan.toString());
         return decPlan;
     }
 }

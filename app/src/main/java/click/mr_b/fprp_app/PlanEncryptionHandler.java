@@ -25,15 +25,15 @@ import javax.crypto.spec.IvParameterSpec;
 
 class PlanEncryptionHandler {
 
-    Cipher encCipher, decCipher;
+    private Cipher encCipher, decCipher;
     private static final int STATUS_ENCRYPTED = 1;
     private static final int STATUS_DECRYPTED = 0;
     private static final int ivSize = 16;
     private KeyStore keyStore;
-    private SecretKey enckey, deckey;
+    private SecretKey encKey, decKey;
     private SecureRandom random;
 
-    public PlanEncryptionHandler()
+    PlanEncryptionHandler()
     {
         try {
             generateKey();
@@ -42,9 +42,9 @@ class PlanEncryptionHandler {
             keyStore = KeyStore.getInstance("AndroidKeyStore");
             keyStore.load(null);
             Log.d("PlanEncryptionHandler", "loaded keystore");
-            enckey = (SecretKey) keyStore.getKey(MainActivity.KEY_NAME,null);
+            encKey = (SecretKey) keyStore.getKey(MainActivity.KEY_NAME,null);
             Log.d("PlanEncryptionHandler", "got secret key for encryption");
-            deckey = (SecretKey) keyStore.getKey(MainActivity.KEY_NAME,null);
+            decKey = (SecretKey) keyStore.getKey(MainActivity.KEY_NAME,null);
             Log.d("authenticationSucceeded", "got secret key for decryption");
             //cipher.init(Cipher.DECRYPT_MODE, key,params);
             //Log.d("authenticationSucceeded", "initialised cipher for decryption");
@@ -61,7 +61,7 @@ class PlanEncryptionHandler {
         }
     }
 
-    public Plan encrypt(Plan plan)
+    Plan encrypt(Plan plan)
     {
         if (plan.getEncstatus() == STATUS_ENCRYPTED)
         {
@@ -95,7 +95,7 @@ class PlanEncryptionHandler {
         }
     }
 
-    public Plan decrypt(Plan plan)
+    Plan decrypt(Plan plan)
     {
         if (plan.getEncstatus() == STATUS_DECRYPTED)
         {
@@ -131,21 +131,21 @@ class PlanEncryptionHandler {
             byte[] iv = new byte[ivSize];
             random.nextBytes(iv);
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
-            encCipher.init(Cipher.ENCRYPT_MODE, enckey,ivParameterSpec);
+            encCipher.init(Cipher.ENCRYPT_MODE, encKey,ivParameterSpec);
             byte[] encrypted = encCipher.doFinal(plainText.getBytes());
-            Log.d("PlanEncryptionHandler - encString", "encrypted bytes");
+            Log.d("PEH - encString", "encrypted bytes");
             // Combine IV and encrypted part.
             byte[] encryptedIVAndText = new byte[ivSize + encrypted.length];
             System.arraycopy(iv, 0, encryptedIVAndText, 0, ivSize);
             System.arraycopy(encrypted, 0, encryptedIVAndText, ivSize, encrypted.length);
-            Log.d("PlanEncryptionHandler - encString", "combined iv and encrypted bytes");
+            Log.d("PEH - encString", "combined iv and encrypted bytes");
             String encoded = Base64.encodeToString(encryptedIVAndText, Base64.NO_WRAP);
-            Log.d("PlanEncryptionHandler - encString", "created base64 encoded value of encrypted iv + bytes" + encoded);
+            Log.d("PEH - encString", "created base64 encoded value of encrypted iv + bytes" + encoded);
             return encoded;
         }
         catch (Exception ex)
         {
-            Log.e("PlanEncryptionHandler - encString", "Caught error encrypting string " + ex.getMessage());
+            Log.e("PEH - encString", "Caught error encrypting string " + ex.getMessage());
             return "";
         }
     }
@@ -155,22 +155,22 @@ class PlanEncryptionHandler {
         try
         {
             byte[] encryptedIvTextBytes = Base64.decode(encText, Base64.NO_WRAP);
-            Log.d("PlanEncryptionHandler - decString", "base64 decoded encrypted string");
+            Log.d("PEH - decString", "base64 decoded encrypted string");
             // Extract IV.
             byte[] iv = new byte[ivSize];
             System.arraycopy(encryptedIvTextBytes, 0, iv, 0, iv.length);
-            Log.d("PlanEncryptionHandler - decString", "extracted iv from encrypted byte array");
+            Log.d("PEH - decString", "extracted iv from encrypted byte array");
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
             // Extract encrypted part.
             int encryptedSize = encryptedIvTextBytes.length - ivSize;
             byte[] encryptedBytes = new byte[encryptedSize];
             System.arraycopy(encryptedIvTextBytes, ivSize, encryptedBytes, 0, encryptedSize);
-            Log.d("PlanEncryptionHandler - decString", "extracted encrypted bytes from encrypted byte array");
-            decCipher.init(Cipher.DECRYPT_MODE, deckey, ivParameterSpec);
-            Log.d("PlanEncryptionHandler - decString", "initialised cipher for decryption");
+            Log.d("PEH - decString", "extracted encrypted bytes from encrypted byte array");
+            decCipher.init(Cipher.DECRYPT_MODE, decKey, ivParameterSpec);
+            Log.d("PEH - decString", "initialised cipher for decryption");
 
             String decoded = new String(decCipher.doFinal(encryptedBytes));
-            Log.d("PlanEncryptionHandler - decString", "successfully decoded data " + decoded);
+            Log.d("PEH - decString", "successfully decoded data " + decoded);
             return decoded;
         }
         catch (Exception ex)
@@ -182,10 +182,6 @@ class PlanEncryptionHandler {
     private void initCipher() {
         try {
             //Obtain a cipher instance and configure it with the properties required for fingerprint authentication//
-            String providerName= "AndroidKeyStoreBCWorkaround";
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) { // below android m
-                providerName = "AndroidOpenSSL";
-            }
             encCipher = Cipher.getInstance(
                     KeyProperties.KEY_ALGORITHM_AES + "/"
                             + KeyProperties.BLOCK_MODE_CBC + "/"
@@ -229,16 +225,6 @@ class PlanEncryptionHandler {
                         .setEncryptionPaddings(
                                 KeyProperties.ENCRYPTION_PADDING_PKCS7)
                         .build());
-                //KeyGenParameterSpec.Builder(KEY_NAME,
-                //KeyProperties.PURPOSE_ENCRYPT |
-                //        KeyProperties.PURPOSE_DECRYPT)
-                //.setDigests(KeyProperties.DIGEST_SHA256,
-                //        KeyProperties.DIGEST_SHA512)
-                //.setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                //.setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
-                //Configure this key so that the user has to confirm their identity with a fingerprint each time they want to use it//
-                //.setUserAuthenticationRequired(true)
-                //.build());
 
                 //Generate the key//
                 keyGenerator.generateKey();

@@ -1,4 +1,4 @@
-package click.mr_b.fprp_app;
+package click.mr_b.myapplication;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

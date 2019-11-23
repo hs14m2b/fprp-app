@@ -97,6 +97,7 @@ public class PlanItemTouchListener implements RecyclerView.OnItemTouchListener {
                 int position1 = recyclerView.getChildAdapterPosition(child1);
                 int position2 = recyclerView.getChildAdapterPosition(child2);
                 float xDelta = e2.getX() - e1.getX();
+
                 if (position1 == position2) {
                     //Toast.makeText(context, "Fling on position :" + position1 + " xDelta is " + xDelta, Toast.LENGTH_SHORT).show();
                     Log.d(this.getClass().getSimpleName(), "Fling on position :" + position1 + " xDelta is " + xDelta);

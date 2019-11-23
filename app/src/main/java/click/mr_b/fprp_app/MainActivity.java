@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,10 +20,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,32 +61,24 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
     private WebView mFprpWebView;
     // Declare a string variable for the key we’re going to use in our fingerprint authentication
     protected static final String KEY_NAME = "fprpEncryptionKey";
-    private Cipher cipher;
-    private Cipher enccipher;
-    private KeyStore keyStore;
-    private KeyGenerator keyGenerator;
     private TextView textView;
     private TextView textView2;
     private ImageView imageView;
-    private FingerprintManager.CryptoObject cryptoObject;
     private FingerprintManager fingerprintManager;
     private KeyguardManager keyguardManager;
     private ActivityMainBinding binding;
-    FingerprintHandler helper;
     private boolean authenticated = false;
     private boolean previouslyauthenticated = false;
     private PlanViewModel mPlanViewModel;
-    List<Plan> mPlans;
     public static final int AUTH_ACTIVITY_REQUEST_CODE = 1;
     public static final int NEW_PLAN_ACTIVITY_REQUEST_CODE = 2;
     private int previousMenuItem = 0;
     private int currentMenuItem = 0;
+    private int mPlanToDelete = -1;
+    private boolean planInEditing = false;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            = (@NonNull MenuItem item) -> {
             previousMenuItem = currentMenuItem;
             switch (item.getItemId()) {
                 case click.mr_b.fprp_app.R.id.navigation_home:
@@ -96,16 +91,10 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
                     return true;
                 case click.mr_b.fprp_app.R.id.navigation_shop:
                     currentMenuItem = 2;
-                    if (showShop()) {
-                        return true;
-                    } else
-                    {
-                        return false;
-                    }
+                    return showShop();
             }
             return false;
-        }
-    };
+        };
 
     @Override
     protected void onPause() {
@@ -125,20 +114,22 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
         navigation = binding.navigation;
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mFprpWebView = binding.fprpWebview;
+        CookieManager.getInstance().setAcceptThirdPartyCookies(mFprpWebView, true);
+        CookieManager.getInstance().setAcceptCookie(true);
         mFprpWebView.loadUrl(getResources().getString(click.mr_b.fprp_app.R.string.shopUrl));
 
-        FAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        FAB.setOnClickListener((View v) -> {
+                planInEditing = true;
                 Intent intent = new Intent(MainActivity.this, NewPlanActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivityForResult(intent, NEW_PLAN_ACTIVITY_REQUEST_CODE);
-            }
         });
         //obeserve the lifecycle events
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-
+        SwipeController swipeController = new SwipeController(this);
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
@@ -184,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
             }
         }
         if (requestCode == NEW_PLAN_ACTIVITY_REQUEST_CODE) {
+            planInEditing = false;
             if (resultCode == RESULT_OK) {
                 String sID = data.getStringExtra(NewPlanActivity.EXTRA_REPLY_ID);
                 Plan plan = new Plan(data.getStringExtra(NewPlanActivity.EXTRA_REPLY_NAME));
@@ -219,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
     private void handleOnPause()
     {
         //authenticated = false;
+        Log.d("MainActivity", "App Paused");
     }
 
     //hide plans and shop
@@ -236,13 +229,16 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
     private boolean showShop()
     {
         if (checkInternetConnection(this)) {
-            mTextMessage.setVisibility(View.INVISIBLE);
-            textView2.setVisibility(View.INVISIBLE);
-            imageView.setVisibility(View.INVISIBLE);
-            mFprpWebView.loadUrl(getResources().getString(click.mr_b.fprp_app.R.string.shopUrl));
-            mFprpWebView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-            FAB.setVisibility(View.INVISIBLE);
+            //mTextMessage.setVisibility(View.INVISIBLE);
+            //textView2.setVisibility(View.INVISIBLE);
+            //imageView.setVisibility(View.INVISIBLE);
+            //mFprpWebView.loadUrl(getResources().getString(click.mr_b.fprp_app.R.string.shopUrl));
+            //mFprpWebView.setVisibility(View.VISIBLE);
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(
+                    click.mr_b.fprp_app.R.string.shopUrl))));
+            //recyclerView.setVisibility(View.INVISIBLE);
+            //FAB.setVisibility(View.INVISIBLE);
+            currentMenuItem = previousMenuItem;
             return true;
         }
         else
@@ -270,32 +266,35 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
                 fingerprintManager =
                         (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
 
-                textView = (TextView) findViewById(click.mr_b.fprp_app.R.id.textView_home);
+                textView = findViewById(click.mr_b.fprp_app.R.id.textView_home);
 
-                //Check whether the device has a fingerprint sensor//
-                if (!fingerprintManager.isHardwareDetected()) {
-                    // If a fingerprint sensor isn’t available, then inform the user that they’ll be unable to use your app’s fingerprint functionality//
-                    //textView.setText("Your device doesn't support fingerprint authentication");
-                }
                 //Check whether the user has granted your app the USE_FINGERPRINT permission//
-                else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-                    // If your app doesn't have this permission, then display the following text//
-                    Toast.makeText(MainActivity.this, "Please enable the fingerprint permission to unlock your plans using fingerprints", Toast.LENGTH_LONG).show();
+                if (fingerprintManager.isHardwareDetected()) {
+                    if (ActivityCompat.checkSelfPermission(this,
+                            Manifest.permission.USE_FINGERPRINT) !=
+                            PackageManager.PERMISSION_GRANTED) {
+                        // If your app doesn't have this permission, then display the following text//
+                        Toast.makeText(MainActivity.this, "Please enable the " +
+                                        "fingerprint permission to unlock your plans using fingerprints",
+                                Toast.LENGTH_LONG).show();
 
-                }
-                //Check that the user has registered at least one fingerprint//
-                else if (!fingerprintManager.hasEnrolledFingerprints()) {
-                    // If the user hasn’t configured any fingerprints, then display the following message//
-                    Toast.makeText(MainActivity.this, "No fingerprint configured. Please register at least one fingerprint in your device's Settings to unlock your plans using fingerprints", Toast.LENGTH_LONG).show();
-                }
-                //Check that the lockscreen is secured//
-                else if (!keyguardManager.isKeyguardSecure()) {
-                    // If the user hasn’t secured their lockscreen with a PIN password or pattern, then display the following text//
-                    Toast.makeText(MainActivity.this, "Please enable lockscreen security in your device's Settings to unlock your plans using fingerprints", Toast.LENGTH_LONG).show();
-                } else {
-
-                    useFingerprint = true;
-
+                    }
+                    //Check that the user has registered at least one fingerprint//
+                    else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                        // If the user hasn’t configured any fingerprints, then display the following message//
+                        Toast.makeText(MainActivity.this, "No fingerprint configured." +
+                                "Please register at least one fingerprint in your device's Settings " +
+                                "to unlock your plans using fingerprints", Toast.LENGTH_LONG).show();
+                    }
+                    //Check that the lockscreen is secured//
+                    else if (!keyguardManager.isKeyguardSecure()) {
+                        // If the user hasn’t secured their lockscreen with a PIN password or pattern, then display the following text//
+                        Toast.makeText(MainActivity.this, "Please enable lockscreen " +
+                                "security in your device's Settings to unlock your " +
+                                "plans using fingerprints", Toast.LENGTH_LONG).show();
+                    } else {
+                        useFingerprint = true;
+                    }
                 }
             }
 
@@ -328,135 +327,6 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
 
     }
 
-/*
-    private void showFP()
-    {
-        mTextMessage.setVisibility(View.INVISIBLE);
-        textView2.setVisibility(View.INVISIBLE);
-        imageView.setVisibility(View.INVISIBLE);
-        mFprpWebView.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.INVISIBLE);
-        FAB.setVisibility(View.INVISIBLE);
-        fpView.setVisibility(View.VISIBLE);
-        try {
-            generateKey();
-            Log.d("Show FP", "Generated Key");
-        } catch (Exception e) {
-            Log.e("Show FP", "Failed to generate key");
-            e.printStackTrace();
-        }
-
-        if (initCipher()) {
-            //If the cipher is initialized successfully, then create a CryptoObject instance//
-            //cryptoObject = new FingerprintManager.CryptoObject(cipher);
-            //Get an instance of KeyguardManager and FingerprintManager//
-            keyguardManager =
-                    (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
-            fingerprintManager =
-                    (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
-
-            // Here, I’m referencing the FingerprintHandler class that we’ll create in the next section. This class will be responsible
-            // for starting the authentication process (via the startAuth method) and processing the authentication process events//
-            helper = new FingerprintHandler(this, this);
-            //helper.startAuth(fingerprintManager, cryptoObject);
-            helper.startAuth(fingerprintManager, null);
-            Toast.makeText(this, "Started Authentication", Toast.LENGTH_LONG).show();
-        }
-    }
-*/
-
-/*
-    //Create the generateKey method that we’ll use to gain access to the Android keystore and generate the encryption key//
-    private void generateKey() throws Exception {
-        try {
-            // Obtain a reference to the Keystore using the standard Android keystore container identifier (“AndroidKeystore”)//
-            keyStore = KeyStore.getInstance("AndroidKeyStore");
-            keyStore.load(null);
-            if (!keyStore.containsAlias(KEY_NAME)) {
-                Log.d("generateKey", "Key not found in keystore so generate new key");
-                //Generate the key//
-                keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
-                //keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore");
-
-                //Initialize an empty KeyStore//
-                keyStore.load(null);
-
-                //Initialize the KeyGenerator//
-                keyGenerator.init(new
-
-                        //Specify the operation(s) this key can be used for//
-                        KeyGenParameterSpec.Builder(KEY_NAME,
-                        KeyProperties.PURPOSE_ENCRYPT |
-                                KeyProperties.PURPOSE_DECRYPT)
-                        .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                        //Set randomized encryption required to false to enable iv to be specified
-                        .setRandomizedEncryptionRequired(false)
-                        //Configure this key so that the user has to confirm their identity with a fingerprint each time they want to use it//
-                        //.setUserAuthenticationRequired(true)
-                        .setEncryptionPaddings(
-                                KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                        .build());
-                //KeyGenParameterSpec.Builder(KEY_NAME,
-                //KeyProperties.PURPOSE_ENCRYPT |
-                //        KeyProperties.PURPOSE_DECRYPT)
-                //.setDigests(KeyProperties.DIGEST_SHA256,
-                //        KeyProperties.DIGEST_SHA512)
-                //.setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                //.setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
-                //Configure this key so that the user has to confirm their identity with a fingerprint each time they want to use it//
-                //.setUserAuthenticationRequired(true)
-                //.build());
-
-                //Generate the key//
-                keyGenerator.generateKey();
-            }
-        } catch (KeyStoreException
-                | NoSuchAlgorithmException
-                | NoSuchProviderException
-                | InvalidAlgorithmParameterException
-                | CertificateException
-                | IOException exc) {
-            exc.printStackTrace();
-            throw new Exception(exc);
-        }
-    }
-    //Create a new method that we’ll use to initialize our cipher//
-    public boolean initCipher() {
-        try {
-            //Obtain a cipher instance and configure it with the properties required for fingerprint authentication//
-            String providerName= "AndroidKeyStoreBCWorkaround";
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) { // below android m
-                providerName = "AndroidOpenSSL";
-            }
-//            cipher = Cipher.getInstance(
-//                    KeyProperties.KEY_ALGORITHM_RSA + "/"
-//                            + KeyProperties.BLOCK_MODE_ECB + "/"
-//                            + KeyProperties.ENCRYPTION_PADDING_RSA_OAEP,providerName); // or "RSA/ECB/OAEPWithSHA-256AndMGF1Padding"
-//            Log.d("initCipher", "Initialised cipher");
-//            enccipher = Cipher.getInstance(
-//                    KeyProperties.KEY_ALGORITHM_RSA + "/"
-//                            + KeyProperties.BLOCK_MODE_ECB + "/"
-//                            + KeyProperties.ENCRYPTION_PADDING_RSA_OAEP,providerName); // or "RSA/ECB/OAEPWithSHA-256AndMGF1Padding"
-//            Log.d("initCipher", "Initialised enccipher");
-            cipher = Cipher.getInstance(
-                    KeyProperties.KEY_ALGORITHM_AES + "/"
-                            + KeyProperties.BLOCK_MODE_CBC + "/"
-                            + KeyProperties.ENCRYPTION_PADDING_PKCS7);
-            enccipher = Cipher.getInstance(
-                    KeyProperties.KEY_ALGORITHM_AES + "/"
-                            + KeyProperties.BLOCK_MODE_CBC + "/"
-                            + KeyProperties.ENCRYPTION_PADDING_PKCS7);
-            return true;
-        } catch (NoSuchAlgorithmException |
-                NoSuchPaddingException e) {
-            Log.e("initCipher", "Failed to get Cipher " + e.getMessage());
-            return false;
-            //throw new RuntimeException("Failed to get Cipher", e);
-        }
-
-    }
-*/
-
     @Override
     public void onClick(View view, final int position) {
         //Values are passing to activity & to fragment as well
@@ -476,57 +346,65 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
 
     @Override
     public void onLongClick(View view, int planId) {
-        Log.d("ClickListener", "Long click on plan :"+planId);
-        //Toast.makeText(MainActivity.this, "Caught event for click on plan :"+planId, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(MainActivity.this, NewPlanActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        Bundle bundle = new Bundle();
-        bundle.putInt("planId", planId);
-        //use the model to get the plan information and add it all to the bundle
-        Plan planToView = mPlanViewModel.getPlanById(planId);
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_ID, planToView.getId()+"");
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_NAME, planToView.getPlanName());
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_Q1, planToView.getQuestion1());
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_Q2, planToView.getQuestion2());
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_Q3, planToView.getQuestion3());
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_Q4, planToView.getQuestion4());
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_Q5, planToView.getQuestion5());
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_Q6, planToView.getQuestion6());
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_RP1, planToView.getPoint1());
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_RP2, planToView.getPoint2());
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_RP3, planToView.getPoint3());
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_RP4, planToView.getPoint4());
-        bundle.putString(NewPlanActivity.EXTRA_REPLY_RP5, planToView.getPoint5());
-        intent.putExtras(bundle);
-        startActivityForResult(intent, NEW_PLAN_ACTIVITY_REQUEST_CODE);
+        if (mPlanToDelete > -1)
+        {
+            Log.d("ClickListener", "Ignoring long click on plan :" + planId + " as " +
+                    "SwipeRight has been triggered");
+        }
+        else {
+            Log.d("ClickListener", "Long click on plan :" + planId);
+            planInEditing = true;
+            //Toast.makeText(MainActivity.this, "Caught event for click on plan :"+planId, Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivity.this, NewPlanActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            Bundle bundle = new Bundle();
+            bundle.putInt("planId", planId);
+            //use the model to get the plan information and add it all to the bundle
+            Plan planToView = mPlanViewModel.getPlanById(planId);
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_ID, planToView.getId() + "");
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_NAME, planToView.getPlanName());
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_Q1, planToView.getQuestion1());
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_Q2, planToView.getQuestion2());
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_Q3, planToView.getQuestion3());
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_Q4, planToView.getQuestion4());
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_Q5, planToView.getQuestion5());
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_Q6, planToView.getQuestion6());
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_RP1, planToView.getPoint1());
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_RP2, planToView.getPoint2());
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_RP3, planToView.getPoint3());
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_RP4, planToView.getPoint4());
+            bundle.putString(NewPlanActivity.EXTRA_REPLY_RP5, planToView.getPoint5());
+            intent.putExtras(bundle);
+            startActivityForResult(intent, NEW_PLAN_ACTIVITY_REQUEST_CODE);
+        }
     }
 
-    private int mPlanToDelete = -1;
     @Override
     public void onSwipeRight(View view, int planId){
+        if (planInEditing)
+        {
+            Log.d("ClickListener", "Ignoring onSwipeRight :" + planId + " as " +
+                    "onLongClick has been triggered and plan is being edited");
+        }
         Log.d("ClickListener", "Swipe Right on plan :"+planId);
         mPlanToDelete = planId;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want delete this plan?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setPositiveButton("Yes", (DialogInterface dialog, int which) -> {
                 Log.d("DialogListener", "Clicked Yes:" + which);
+                Log.d("DialogListener", "deleting plan " + mPlanToDelete);
                 if (mPlanToDelete > -1) {
                     Plan planToDelete = new Plan();
                     planToDelete.setId(mPlanToDelete);
                     mPlanViewModel.delete(planToDelete);
+                    Log.d("DialogListener", "deleted plan from PlanViewModel");
                     mPlanToDelete = -1;
                 }
-            }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setNegativeButton("No", (DialogInterface dialog, int which) ->{
                 Log.d("DialogListener", "Clicked No:" + which);
                 mPlanToDelete = -1;
-            }
         });
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
@@ -543,9 +421,14 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
         ConnectivityManager con_manager = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        return (con_manager.getActiveNetworkInfo() != null
-                && con_manager.getActiveNetworkInfo().isAvailable()
-                && con_manager.getActiveNetworkInfo().isConnected());
+        try {
+            if (con_manager.getActiveNetworkInfo() == null) return false;
+            return (con_manager.getActiveNetworkInfo().isAvailable()
+                        && con_manager.getActiveNetworkInfo().isConnected());
+        }
+        catch (NullPointerException npe) {
+            return false;
+        }
     }
 
     @Override
@@ -562,16 +445,10 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             mPlanViewModel = ViewModelProviders.of(this).get(PlanViewModel.class);
-            mPlanViewModel.getAllPlans().observe(this, new Observer<List<Plan>>() {
-                @Override
-                public void onChanged(@Nullable final List<Plan> plans) {
-                    // Update the cached copy of the words in the adapter.
-                    // mPlans = plans;
-                    adapter.setPlans(plans);
-                }
-            });
+            mPlanViewModel.getAllPlans().observe(this, adapter::setPlans);
 
-            recyclerView.addOnItemTouchListener(new PlanItemTouchListener(this, recyclerView, mPlanViewModel, this));
+            recyclerView.addOnItemTouchListener(new PlanItemTouchListener(this,
+                    recyclerView, mPlanViewModel, this));
             previouslyauthenticated = true;
         }
     }
