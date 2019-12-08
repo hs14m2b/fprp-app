@@ -27,4 +27,7 @@
     <integer name="hint_size">16</integer>
     <integer name="text_size">24</integer>
     <string name="shopUrl">https://www.amazon.co.uk/Five-Point-Rescue-Plan-Take-control-ebook/dp/B075RVQ6P2/ref=sr_1_2?ie=UTF8&#38;qid=1527261281&#38;sr=8-2&#38;keywords=Five-point+rescue+plan</string>
+    <string name="channel_name">Channel Name</string>
+    <string name="channel_description">Channel Description</string>
+    <string name="channel_id">Channel ID</string>
 </resources>

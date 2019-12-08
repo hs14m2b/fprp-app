@@ -1,6 +1,8 @@
 package click.mr_b.fprp_app;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.OnLifecycleEvent;
@@ -11,11 +13,14 @@ import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -76,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
     private int currentMenuItem = 0;
     private int mPlanToDelete = -1;
     private boolean planInEditing = false;
+    private String CHANNEL_ID;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = (@NonNull MenuItem item) -> {
@@ -130,8 +136,37 @@ public class MainActivity extends AppCompatActivity implements LifecycleObserver
         SwipeController swipeController = new SwipeController(this);
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
         itemTouchhelper.attachToRecyclerView(recyclerView);
-   }
 
+        //create notification
+        createNotificationChannel();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.mipmap.fprp_launcher_round)
+                .setContentTitle("NotificatioTitle")
+                .setContentText("This is the text")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify((int)SystemClock.currentThreadTimeMillis(), builder.build());
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        CHANNEL_ID = getString(R.string.channel_id);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     void onAppBackgrounded() {
         Log.d(this.getClass().getSimpleName(), "App in background");
